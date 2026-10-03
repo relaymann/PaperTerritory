@@ -48,7 +48,7 @@ class BotGameView(c:Context,private val economy:Economy,private val done:()->Uni
     }
     p.color=Color.WHITE
     c.drawRoundRect(10f,10f,width-10f,60f,18f,18f,p)
-    t.color=0xff22252b
+    t.color=0xff22252b.toInt()
     t.textSize=17f
     c.drawText("BOT GAME",25f,34f,t)
     t.textSize=12f
