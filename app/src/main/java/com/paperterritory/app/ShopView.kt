@@ -33,7 +33,6 @@ class ShopView(context:Context,private val economy:Economy,private val onBack:()
   pill(c,width-244f,width-26f,"GEMS",economy.gems.toString(),Color.rgb(232,93,255))
   t.color=Color.WHITE;t.textSize=23f;c.drawText("COLLECTION",28f,118f,t)
   t.textSize=12f;t.typeface=Typeface.DEFAULT;c.drawText("${economy.ownedCount()}/${CharacterCatalog.all.size} characters collected",28f,139f,t);t.typeface=Typeface.DEFAULT_BOLD
-  val selected=economy.selectedCharacter();t.color=Color.rgb(190,255,70);t.textSize=12f;t.textAlign=Paint.Align.LEFT;c.drawText("SELECTED: "+selected.name,28f,157f-scroll,t);t.textAlign=Paint.Align.LEFT
  }
 
  private fun pill(c:Canvas,l:Float,r:Float,label:String,value:String,color:Int){
@@ -110,7 +109,6 @@ class ShopView(context:Context,private val economy:Economy,private val onBack:()
     val top=160f-scroll
     if(e.y>=top+224f&&e.y<=top+276f){if(e.x<width/2f)buy(false) else buy(true);return true}
     if(e.y>height-100f&&e.x<140f){onBack();return true}
-    val tile=(width-72f)/3f;for(i in CharacterCatalog.all.indices){val x0=24f+(i%3)*(tile+12f);val y0=top+330f+(i/3)*(tile+12f);if(e.x in x0..(x0+tile)&&e.y in y0..(y0+tile)){val ch=CharacterCatalog.all[i];if(economy.owned().contains(ch.id)){economy.select(ch.id);notice=ch.name+" selected";invalidate()}else notice="Open a crate to unlock "+ch.name;return true}}
     return true
    }
   }
