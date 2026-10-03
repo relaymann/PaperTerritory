@@ -45,5 +45,6 @@ class Economy(private val context:Context) {
     fun owned():MutableSet<String> =(prefs.getString("owned","")?:"").split(",").filter{it.isNotBlank()}.toMutableSet()
     fun own(id:String){val set=owned();if(set.add(id))prefs.edit().putString("owned",set.joinToString(",")).apply()}
     fun ownedCount()=owned().size
+    fun selectedCharacter():CharacterDef = CharacterCatalog.all.firstOrNull{it.id in owned()} ?: CharacterCatalog.all.first()
     fun randomCharacter():CharacterDef{val owned=owned();val missing=CharacterCatalog.all.filterNot{owned.contains(it.id)};return(if(missing.isNotEmpty())missing else CharacterCatalog.all).random(Random(System.nanoTime()))}
 }
