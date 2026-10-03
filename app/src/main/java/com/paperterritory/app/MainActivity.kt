@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.graphics.Color
 import android.graphics.Typeface
 import android.view.Gravity
-import android.widget.*
+import android.widget.*\nimport android.graphics.drawable.GradientDrawable
 
 class MainActivity:Activity(){
  private val n=NetworkClient()
@@ -15,18 +15,18 @@ class MainActivity:Activity(){
   orientation=LinearLayout.VERTICAL
   gravity=Gravity.CENTER
   setPadding(42,42,42,42)
-  setBackgroundColor(Color.rgb(11,32,82))
+  setBackgroundColor(Color.rgb(22,103,240))
  }
  private fun b(t:String,a:()->Unit)=Button(this).apply{
   text=t;setOnClickListener{a()};textSize=16f;isAllCaps=false
-  setTextColor(Color.WHITE);setBackgroundColor(Color.rgb(42,91,205))
+  setTextColor(Color.WHITE);background=GradientDrawable().apply{setColor(Color.rgb(39,75,188));cornerRadius=28f;setStroke(2,Color.argb(70,255,255,255))}
   layoutParams=LinearLayout.LayoutParams(-1,64).apply{setMargins(0,9,0,9)}
  }
  override fun onCreate(x:Bundle?){super.onCreate(x);economy=Economy(this);menu()}
  private fun menu(){
   val v=base()
   v.addView(TextView(this).apply{
-   text="TERRITORY";textSize=38f;setTextColor(Color.WHITE);gravity=Gravity.CENTER;typeface=Typeface.DEFAULT_BOLD
+   text="TERRITORY";textSize=38f;setTextColor(Color.WHITE);gravity=Gravity.CENTER;typeface=Typeface.DEFAULT_BOLD;setShadowLayer(4f,0f,3f,0x66000000)
   },LinearLayout.LayoutParams(-1,70))
   v.addView(TextView(this).apply{
    text="Claim ground. Cut trails. Survive.";setTextColor(Color.rgb(205,220,255));gravity=Gravity.CENTER
@@ -35,7 +35,7 @@ class MainActivity:Activity(){
    text="🪙 ${economy.coins}     💎 ${economy.gems}"
    textSize=18f;setTextColor(Color.WHITE);gravity=Gravity.CENTER
   }
-  v.addView(wallet,LinearLayout.LayoutParams(-1,48))
+  v.addView(wallet,LinearLayout.LayoutParams(-1,54))\n  v.addView(TextView(this).apply{text="★  HEROES   •   MYSTERY CRATE";textSize=14f;setTextColor(Color.rgb(255,235,80));gravity=Gravity.CENTER;typeface=Typeface.DEFAULT_BOLD},LinearLayout.LayoutParams(-1,38))
   v.addView(b("PLAY ONLINE"){play(false,"")})
   v.addView(b("CREATE PRIVATE ROOM"){create()})
   v.addView(b("JOIN PRIVATE ROOM"){join()})
@@ -47,7 +47,7 @@ class MainActivity:Activity(){
  private fun play(p:Boolean,r:String){
   val holder=arrayOfNulls<GameView>(1)
   n.connect("Player"+(100..999).random(),r,p,{state->runOnUiThread{
-   if(holder[0]==null){holder[0]=GameView(this,n,state);setContentView(holder[0])}
+   if(holder[0]==null){holder[0]=GameView(this,n,economy,state);setContentView(holder[0])}
    else holder[0]!!.updateState(state)
   }},{m->runOnUiThread{Toast.makeText(this,m,Toast.LENGTH_LONG).show();menu()}})
  }

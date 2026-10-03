@@ -2,7 +2,7 @@ package com.paperterritory.app
 
 import android.content.Context
 import android.graphics.*
-import android.view.MotionEvent
+import android.view.View\nimport android.view.MotionEvent
 import kotlin.math.*
 
 class ShopView(context:Context,private val economy:Economy,private val onBack:()->Unit):View(context){

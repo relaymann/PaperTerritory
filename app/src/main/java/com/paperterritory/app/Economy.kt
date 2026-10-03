@@ -39,8 +39,8 @@ class Economy(private val context:Context) {
 
     fun spendCoins(amount:Int):Boolean{if(coins<amount)return false;coins-=amount;return true}
     fun spendGems(amount:Int):Boolean{if(gems<amount)return false;gems-=amount;return true}
-    fun addCoins(amount:Int){coins+=amount}
-    fun owned():MutableSet<String>=(prefs.getString("owned","")?:"").split(",").filter{it.isNotBlank()}.toMutableSet()
+    fun addCoins(amount:Int){coins+=amount}\n    fun rewardKill(){addCoins(15)}
+    fun owned():MutableSet<String> =(prefs.getString("owned","")?:"").split(",").filter{it.isNotBlank()}.toMutableSet()
     fun own(id:String){val set=owned();if(set.add(id))prefs.edit().putString("owned",set.joinToString(",")).apply()}
     fun ownedCount()=owned().size
     fun randomCharacter():CharacterDef{val owned=owned();val missing=CharacterCatalog.all.filterNot{owned.contains(it.id)};return(if(missing.isNotEmpty())missing else CharacterCatalog.all).random(Random(System.nanoTime()))}
