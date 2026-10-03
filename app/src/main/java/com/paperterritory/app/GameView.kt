@@ -1,0 +1,11 @@
+package com.paperterritory.app
+import android.content.Context;import android.graphics.*;import android.view.*;import kotlin.math.hypot;import kotlin.math.min
+class GameView(c:Context,private val n:NetworkClient,private var s:GameState):View(c){private val bg=Paint().apply{color=Color.rgb(9,10,13)};private val fill=Paint(1);private val line=Paint(1).apply{style=Paint.Style.STROKE;strokeCap=Paint.Cap.ROUND};private var sx=0f;private var sy=0f;private var last=0L
+override fun onDraw(c:Canvas){c.drawRect(0f,0f,width.toFloat(),height.toFloat(),bg);val z=min(width.toFloat()/s.width,(height-80f)/s.height)*.92f;val ox=(width-s.width*z)/2f;val oy=80f+(height-80-s.height*z)/2f;fun X(v:Float)=ox+v*z;fun Y(v:Float)=oy+v*z
+for((k,id)in s.cells){val a=k.split(',');val p=s.players.find{it.id==id}?:continue;fill.color=Color.argb(185,Color.red(p.color),Color.green(p.color),Color.blue(p.color));val x=a[0].toInt();val y=a[1].toInt();c.drawRect(X(x*4f),Y(y*4f),X((x+1)*4f),Y((y+1)*4f),fill)}
+line.color=Color.rgb(75,78,86);line.strokeWidth=3f;c.drawRect(X(0f),Y(0f),X(s.width.toFloat()),Y(s.height.toFloat()),line)
+for(p in s.players.filter{it.alive&&it.trail.size>1}){line.color=p.color;line.strokeWidth=9f;val path=Path();path.moveTo(X(p.trail[0].first),Y(p.trail[0].second));for(q in p.trail.drop(1))path.lineTo(X(q.first),Y(q.second));c.drawPath(path,line)}
+for(p in s.players.filter{it.alive}){fill.color=p.color;c.drawCircle(X(p.x),Y(p.y),11f,fill);if(p.id==s.selfId){line.color=Color.WHITE;line.strokeWidth=3f;c.drawCircle(X(p.x),Y(p.y),16f,line)}}
+fill.color=Color.WHITE;fill.textSize=22f;fill.typeface=Typeface.DEFAULT_BOLD;c.drawText("TERRITORY",24f,32f,fill);fill.textSize=14f;fill.typeface=Typeface.DEFAULT;s.players.sortedByDescending{it.area}.take(5).forEachIndexed{i,p->c.drawText((i+1).toString()+". "+p.name+"  "+p.area,24f,55f+i*20f,fill)};fill.textSize=12f;c.drawText(if(s.room.isBlank())"PUBLIC" else "ROOM "+s.room,24f,height-20f,fill);postInvalidateDelayed(50)}
+override fun onTouchEvent(e:MotionEvent):Boolean{when(e.action){MotionEvent.ACTION_DOWN->{sx=e.x;sy=e.y;send(0f,0f)};MotionEvent.ACTION_MOVE->send(e.x-sx,e.y-sy)};return true}
+private fun send(x:Float,y:Float){val now=System.currentTimeMillis();if(now-last<45)return;last=now;val l=hypot(x.toDouble(),y.toDouble()).toFloat();if(l>4)n.direction(x/l,y/l)}}
