@@ -4,6 +4,8 @@ import android.graphics.*
 import android.view.*
 import kotlin.math.*
 
+private val GameState.privateRoom:Boolean get() = room.length == 5 && mode == "standard"
+
 class GameView(c:Context,private val n:NetworkClient,private val economy:Economy,private var s:GameState):View(c){
  private var lastKills=-1
  fun isSelf(id:String)=s.selfId==id
@@ -28,7 +30,6 @@ class GameView(c:Context,private val n:NetworkClient,private val economy:Economy
   p.color=Color.argb(242,255,255,255);c.drawRoundRect(10f,10f,width-10f,66f,18f,18f,p);t.color=Color.rgb(30,33,38);t.textSize=18f;t.typeface=Typeface.DEFAULT_BOLD;c.drawText(if(s.mode=="duel")"1V1 DUEL" else "TERRITORY",25f,35f,t)
   val me=s.players.firstOrNull{it.id==s.selfId};if(lastKills==0&&me!=null)lastKills=me.kills;t.textSize=12f;t.typeface=Typeface.DEFAULT;val total=(s.width/4f)*(s.height/4f);val pct=if(total>0)((me?.area?:0)/total*100f).roundToInt()else 0;c.drawText("AREA "+pct+"%",25f,54f,t);t.textAlign=Paint.Align.RIGHT;c.drawText(if(s.mode=="duel")"FIRST TO 35%" else if(s.room.isBlank())"PUBLIC MATCH" else "PRIVATE • "+s.room,width-25f,35f,t);c.drawText(s.players.count{it.alive}.toString()+" PLAYERS",width-25f,54f,t);t.textAlign=Paint.Align.LEFT
   val rows=min(5,s.players.size);p.color=Color.argb(228,255,255,255);c.drawRoundRect(12f,84f,205f,94f+rows*25f,15f,15f,p);s.players.sortedByDescending{it.area}.take(5).forEachIndexed{i,a->{t.color=if(a.id==s.selfId)a.color else Color.rgb(55,58,65);t.textSize=12f;t.typeface=if(a.id==s.selfId)Typeface.DEFAULT_BOLD else Typeface.DEFAULT;c.drawText((i+1).toString()+". "+a.name.take(12),25f,112f+i*25f,t);t.textAlign=Paint.Align.RIGHT;c.drawText(a.area.toString(),191f,112f+i*25f,t);t.textAlign=Paint.Align.LEFT}}
-  if(System.currentTimeMillis()<rewardToastUntil){p.color=Color.argb(225,35,72,190);c.drawRoundRect(width/2f-82f,76f,width/2f+82f,112f,18f,18f,p);t.color=Color.rgb(255,235,67);t.textSize=16f;t.textAlign=Paint.Align.CENTER;t.typeface=Typeface.DEFAULT_BOLD;c.drawText(rewardText,width/2f,100f,t);t.textAlign=Paint.Align.LEFT}
   if(System.currentTimeMillis()<rewardToastUntil){p.color=Color.argb(225,35,72,190);c.drawRoundRect(width/2f-82f,76f,width/2f+82f,112f,18f,18f,p);t.color=Color.rgb(255,235,67);t.textSize=16f;t.textAlign=Paint.Align.CENTER;t.typeface=Typeface.DEFAULT_BOLD;c.drawText(rewardText,width/2f,100f,t);t.textAlign=Paint.Align.LEFT}
   if(me?.alive==false){p.color=Color.argb(220,20,22,27);c.drawRoundRect(width/2f-135,height/2f-55,width/2f+135,height/2f+55,20f,20f,p);t.color=Color.WHITE;t.textAlign=Paint.Align.CENTER;t.textSize=23f;t.typeface=Typeface.DEFAULT_BOLD;c.drawText("ELIMINATED",width/2f,height/2f-8,t);t.textSize=13f;t.typeface=Typeface.DEFAULT;c.drawText("Respawning…",width/2f,height/2f+20,t);t.textAlign=Paint.Align.LEFT}
   postInvalidateDelayed(33)
