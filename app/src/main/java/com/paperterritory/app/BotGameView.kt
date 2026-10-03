@@ -9,7 +9,7 @@ class BotGameView(c:Context,private val economy:Economy,private val done:()->Uni
  private val worldWidth=180f;private val worldHeight=120f;private val cellSize=4f;private val own=mutableSetOf<String>();private val trail=mutableListOf<Pair<Float,Float>>();private val bots=mutableListOf<B>()
  private var x=25f;private var y=60f;private var dx=1f;private var dy=0f;private var alive=true;private var won=false;private var kills=0;private var tick=0
  private val p=Paint(1);private val l=Paint(1).apply{style=Paint.Style.STROKE;strokeCap=Paint.Cap.ROUND};private val t=Paint(1).apply{typeface=Typeface.DEFAULT_BOLD}
- init{home(own,6,15);val cs=intArrayOf(0xffef4d58.toInt(),0xff43c98b.toInt(),0xffa05cff.toInt(),0xffffae32.toInt(),0xff24bfc7.toInt(),0xffff6eb4.toInt(),0xff98ca3b.toInt());for(i in 0..6)bots+=B(35f+(i%4)*35f,20f+(i/4)*60f,Random.nextFloat()*2-1,Random.nextFloat()*2-1,cs[i])}}
+ init{home(own,6,15);val cs=intArrayOf(0xffef4d58.toInt(),0xff43c98b.toInt(),0xffa05cff.toInt(),0xffffae32.toInt(),0xff24bfc7.toInt(),0xffff6eb4.toInt(),0xff98ca3b.toInt());for(i in 0..6)bots+=B(35f+(i%4)*35f,20f+(i/4)*60f,Random.nextFloat()*2-1,Random.nextFloat()*2-1,cs[i])}
  private fun k(a:Int,b:Int)=a.toString()+","+b
  private fun home(s:MutableSet<String>,cx:Int,cy:Int){for(j in -6..6)for(i in -6..6){val a=cx+i;val b=cy+j;if(a in 0..44&&b in 0..29)s.add(k(a,b))}}
  private fun inside(px:Float,py:Float,s:Set<String>)=s.contains(k((px/cellSize).toInt().coerceIn(0,44),(py/cellSize).toInt().coerceIn(0,29)))
