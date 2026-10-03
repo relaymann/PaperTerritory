@@ -7,6 +7,7 @@ import kotlin.math.*
 class GameView(c:Context,private val n:NetworkClient,private val economy:Economy,private var s:GameState):View(c){
  private var lastKills=-1
  fun isSelf(id:String)=s.selfId==id
+ fun bonusAllowed()=s.mode=="standard"&&!s.privateRoom
  private var rewardToastUntil=0L
  private var rewardText=""
  private val bg=Paint().apply{color=Color.rgb(247,248,250)}
